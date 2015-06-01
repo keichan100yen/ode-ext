@@ -74,38 +74,34 @@ struct Duffing {
 
 int main()
 {
+    std::cout.precision(20);
 	using itv = kv::interval<double>;
 
     typedef Lorenz Func;
-    ub::vector<itv> x(3);
-    x(0) = 15.; x(1) = 15.; x(2) = 36.;
-    auto x2 = kv::make_init<itv>(15., 15., 36.);
-
+    ub::vector<itv> x1(3); // This is for odelong_maffine2.
+    x1(0) = 15.; x1(1) = 15.; x1(2) = 36.;
+    auto x2 = kv::make_init<itv>(15., 15., 36.); // This is for odelong_maffine_ext.
+    itv begin(0.), end1(20.), end2(20.); 
+    
     /*
     typedef Duffing Func;
-    ub::vector<itv> x(2);
-    x(0) = itv(-5., 5.); x(1) = itv(-5., 5.);
+    ub::vector<itv> x1(2);
+    x1(0) = itv(-5., 5.); x1(1) = itv(-5., 5.);
     auto x2 = kv::make_init<itv>(itv(-5., 5.), itv(-5., 5.));
+    itv begin(0.), end1, end2; 
     */
 
     /*
     typedef VdP Func;
-    ub::vector<itv> x(2);
-    x(0) = itv(1.); x(1) = itv(1.);
+    ub::vector<itv> x1(2);
+    x1(0) = itv(1.); x1(1) = itv(1.);
     auto x2 = kv::make_init<itv>(1., 1.);
+    itv begin(0.), end1, end2; 
     */
 
-    std::cout.precision(20);
-
-    itv end;
-    end = 20.;
-    // end = 0.01;
-
-    int r;
-
+    std::cout << "odelong_maffine2 begin (original solver of the kv library)." << std::endl;
     auto ts = std::chrono::system_clock::now();
-    // r = kv::odelong_maffine(Func(), x, itv(0.), end, kv::ode_param<double>().set_iteration(0).set_verbose(0).set_order(22).set_autostep(false).set_ep_reduce(250).set_ep_reduce_limit(300));
-    r = kv::odelong_maffine2(Func(), x, itv(0.), end, kv::ode_param<double>().set_iteration(0).set_verbose(0).set_order(22).set_autostep(true).set_ep_reduce(250).set_ep_reduce_limit(300));
+    int r = kv::odelong_maffine2(Func(), x1, begin, end1, kv::ode_param<double>().set_iteration(0).set_verbose(0).set_order(22).set_autostep(true).set_ep_reduce(250).set_ep_reduce_limit(300));
 
     auto te = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = te-ts;
@@ -114,23 +110,20 @@ int main()
     if (r == 0)
 		std::cout << "Cannot calculate solution.\n";
     else if (r == 1) {
-		std::cout << "Solution calculated until t = " << end << ".\n";
-        std::cout << x << "\n";
+		std::cout << "Solution calculated until t = " << end1 << ".\n";
+        std::cout << x1 << "\n";
     } else {
-		std::cout << "Solution calculated.\n";
-        std::cout << x << "\n";
+		std::cout << "Solution calculated. t = " << end1 << "\n";
+        std::cout << x1 << "\n";
 	}
-
+    std::cout << "odelong_maffine2 end." << std::endl;
+    // 
+    
     std::cout << std::endl << std::endl;
-
-
-    end = 20.;
-    /*
-    end = 0.01; */
-
+    
+    std::cout << "odelong_maffine_ext begin (ODEWithExpressionTemplate)." << std::endl;
     ts = std::chrono::system_clock::now();
-    r = kv::odelong_maffine_ext(Func(), x2, itv(0.), end, kv::ode_param<double>().set_iteration(0).set_verbose(0).set_order(22).set_autostep(true).set_ep_reduce(250).set_ep_reduce_limit(300));
-    // r = kv::odelong_maffine_ext<3>(Func(), x, itv(0.), end, kv::ode_param<double>().set_iteration(0).set_verbose(0).set_order(22).set_autostep(false).set_ep_reduce(250).set_ep_reduce_limit(300));
+    r = kv::odelong_maffine_ext(Func(), x2, begin, end2, kv::ode_param<double>().set_iteration(0).set_verbose(0).set_order(22).set_autostep(true).set_ep_reduce(250).set_ep_reduce_limit(300));
     te = std::chrono::system_clock::now();
     elapsed_seconds = te-ts;
     std::cout << "time: " << elapsed_seconds.count() << " [sec]" << std::endl;
@@ -138,16 +131,17 @@ int main()
     if (r == 0)
         std::cout << "Cannot calculate solution.\n";
     else if (r == 1) {
-        std::cout << "Solution calculated until t = " << end << ".\n";
+        std::cout << "Solution calculated until t = " << end2 << ".\n";
         for (auto r : x2)
             std::cout << r << ", ";
         std::cout << std::endl;;
     } else {
-        std::cout << "Solution calculated.\n";
+        std::cout << "Solution calculated. t = " << end2 << "\n";
         for (auto r : x2)
             std::cout << r << ", ";
         std::cout << std::endl;
     }
+    std::cout << "odelong_maffine_ext End." << std::endl;
 
 	return 0;
 }
