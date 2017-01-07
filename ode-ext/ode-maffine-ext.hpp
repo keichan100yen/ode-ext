@@ -1,3 +1,5 @@
+Copyright (c) 2017 Keiichiro KASHIWAGI
+
 #ifndef ODE_MAFFINE_EXT_HPP
 #define ODE_MAFFINE_EXT_HPP
 
