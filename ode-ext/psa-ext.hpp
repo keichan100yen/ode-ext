@@ -1,3 +1,5 @@
+Copyright (c) 2017 Keiichiro KASHIWAGI
+
 #ifndef PSA_EXT_HPP
 #define PSA_EXT_HPP
 
