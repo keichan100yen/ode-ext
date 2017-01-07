@@ -1,0 +1,3 @@
+[submodule "kv"]
+	path = kv
+	url = https://github.com/mskashi/kv.git
