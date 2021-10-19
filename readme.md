@@ -2,7 +2,7 @@
 
 ## A fast Ordinary Differential Equations solver using expression template for C++
 
-ode-ext is a reference implementation of [my study](http://dspace.wul.waseda.ac.jp/dspace/bitstream/2065/40295/1/Honbun-6338.pdf) 
+ode-ext is a reference implementation of [my study](https://waseda.repo.nii.ac.jp/?action=repository_uri&item_id=18718&file_id=20&file_no=1) 
 using [kv library](https://github.com/mskashi/kv).
 
 ## <font color="Red">Build and execute</font>
